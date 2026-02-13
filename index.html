@@ -4,128 +4,99 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="description" content="A mindfulness app that plays Tibetan singing bowl sounds at random intervals throughout the day">
-    <meta name="theme-color" content="#8B6B47">
+    <meta name="theme-color" content="#8B4513">
     <title>Mindful Bell</title>
-    <link rel="manifest" href="manifest.json">
     <link rel="stylesheet" href="style.css">
-    <link rel="apple-touch-icon" href="icon-192.png">
+    <link rel="manifest" href="manifest.json">
+    <link rel="apple-touch-icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='0.9em' font-size='90'>🔔</text></svg>">
 </head>
 <body>
-    <div id="app">
-        <!-- Main Screen -->
-        <div id="main-screen" class="screen active">
-            <header>
-                <h1>🔔 Mindful Bell</h1>
-                <p class="tagline">Gentle reminders to be present</p>
-            </header>
+    <div class="container">
+        <header>
+            <h1>🔔 Mindful Bell</h1>
+            <p class="subtitle">Find peace in the present moment</p>
+        </header>
 
-            <main>
-                <div class="status-container">
-                    <div id="status-indicator" class="status-active">
-                        <span id="status-text">Active</span>
-                    </div>
+        <main id="mainScreen">
+            <div class="status-card">
+                <div class="status-indicator" id="statusIndicator">
+                    <span class="status-dot"></span>
+                    <span id="statusText">Active</span>
+                </div>
+                
+                <div class="next-bell">
+                    <p class="label">Next bell in</p>
+                    <p class="time" id="nextBellTime">--:--</p>
                 </div>
 
-                <div class="bell-container">
-                    <button id="play-bell" class="bell-button" aria-label="Play bell sound">
-                        <svg viewBox="0 0 100 100" class="bell-icon">
-                            <path d="M50 15 L50 25 M35 35 Q35 25 50 25 Q65 25 65 35 L65 65 Q65 75 50 75 Q35 75 35 65 Z M30 75 L70 75 M45 75 Q45 85 50 85 Q55 85 55 75" 
-                                  stroke="currentColor" stroke-width="3" fill="none" stroke-linecap="round"/>
-                        </svg>
-                    </button>
-                    <p class="bell-label">Test Bell Sound</p>
+                <div class="bell-count">
+                    <p class="label">Bells today</p>
+                    <p class="count" id="bellCount">0</p>
                 </div>
+            </div>
 
-                <div class="info-card">
-                    <div class="info-item">
-                        <span class="label">Next Bell</span>
-                        <span id="next-bell-time" class="value">--:--</span>
+            <button class="btn btn-primary" id="testBellBtn">
+                <span class="btn-icon">🔔</span>
+                Play Bell Sound
+            </button>
+
+            <button class="btn btn-secondary" id="settingsBtn">
+                <span class="btn-icon">⚙️</span>
+                Settings
+            </button>
+        </main>
+
+        <div id="settingsScreen" class="settings-screen hidden">
+            <div class="settings-header">
+                <button class="btn-back" id="backBtn">← Back</button>
+                <h2>Settings</h2>
+            </div>
+
+            <div class="setting-group">
+                <label class="setting-label">
+                    <span>Active</span>
+                    <label class="toggle">
+                        <input type="checkbox" id="activeToggle" checked>
+                        <span class="toggle-slider"></span>
+                    </label>
+                </label>
+                <p class="setting-description">Enable or disable bell notifications</p>
+            </div>
+
+            <div class="setting-group">
+                <label class="setting-label">Active Hours</label>
+                <p class="setting-description">Bell will only ring during these hours</p>
+                
+                <div class="time-range">
+                    <div class="time-input">
+                        <label>Start Time</label>
+                        <input type="time" id="startTime" value="08:00">
                     </div>
-                    <div class="info-item">
-                        <span class="label">Active Hours</span>
-                        <span id="active-hours" class="value">8:00 AM - 9:00 PM</span>
-                    </div>
-                    <div class="info-item">
-                        <span class="label">Today's Bells</span>
-                        <span id="bells-today" class="value">0</span>
+                    <div class="time-input">
+                        <label>End Time</label>
+                        <input type="time" id="endTime" value="21:00">
                     </div>
                 </div>
-            </main>
+            </div>
 
-            <footer>
-                <button id="settings-btn" class="btn-secondary">
-                    <svg viewBox="0 0 24 24" width="20" height="20">
-                        <path d="M12 15a3 3 0 100-6 3 3 0 000 6z" stroke="currentColor" stroke-width="2" fill="none"/>
-                        <path d="M19.4 15a1.65 1.65 0 00.33 1.82l.06.06a2 2 0 010 2.83 2 2 0 01-2.83 0l-.06-.06a1.65 1.65 0 00-1.82-.33 1.65 1.65 0 00-1 1.51V21a2 2 0 01-4 0v-.09A1.65 1.65 0 009 19.4a1.65 1.65 0 00-1.82.33l-.06.06a2 2 0 01-2.83 0 2 2 0 010-2.83l.06-.06a1.65 1.65 0 00.33-1.82 1.65 1.65 0 00-1.51-1H3a2 2 0 010-4h.09A1.65 1.65 0 004.6 9a1.65 1.65 0 00-.33-1.82l-.06-.06a2 2 0 010-2.83 2 2 0 012.83 0l.06.06a1.65 1.65 0 001.82.33H9a1.65 1.65 0 001-1.51V3a2 2 0 014 0v.09a1.65 1.65 0 001 1.51 1.65 1.65 0 001.82-.33l.06-.06a2 2 0 012.83 0 2 2 0 010 2.83l-.06.06a1.65 1.65 0 00-.33 1.82V9a1.65 1.65 0 001.51 1H21a2 2 0 010 4h-.09a1.65 1.65 0 00-1.51 1z" stroke="currentColor" stroke-width="2" fill="none"/>
-                    </svg>
-                    Settings
-                </button>
-            </footer>
+            <div class="setting-group">
+                <label class="setting-label">Bell Frequency</label>
+                <p class="setting-description">Average bells per hour: <span id="frequencyDisplay">2-3</span></p>
+                <input type="range" id="frequencySlider" min="1" max="5" value="2.5" step="0.5" class="slider">
+                <div class="range-labels">
+                    <span>Less</span>
+                    <span>More</span>
+                </div>
+            </div>
+
+            <button class="btn btn-danger" id="resetBtn">Reset to Defaults</button>
         </div>
 
-        <!-- Settings Screen -->
-        <div id="settings-screen" class="screen">
-            <header>
-                <button id="back-btn" class="btn-back" aria-label="Go back">
-                    <svg viewBox="0 0 24 24" width="24" height="24">
-                        <path d="M19 12H5M12 19l-7-7 7-7" stroke="currentColor" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round"/>
-                    </svg>
-                </button>
-                <h1>Settings</h1>
-            </header>
-
-            <main>
-                <div class="settings-section">
-                    <div class="setting-item">
-                        <label for="toggle-active" class="setting-label">
-                            <span>Enable Bell</span>
-                            <span class="setting-description">Play bells at random intervals</span>
-                        </label>
-                        <label class="toggle">
-                            <input type="checkbox" id="toggle-active" checked>
-                            <span class="toggle-slider"></span>
-                        </label>
-                    </div>
-                </div>
-
-                <div class="settings-section">
-                    <h2>Active Hours</h2>
-                    <div class="setting-item">
-                        <label for="start-hour" class="setting-label">
-                            <span>Start Time</span>
-                            <span id="start-time-display" class="time-display">8:00 AM</span>
-                        </label>
-                        <input type="range" id="start-hour" min="0" max="23" value="8" class="slider">
-                    </div>
-                    <div class="setting-item">
-                        <label for="end-hour" class="setting-label">
-                            <span>End Time</span>
-                            <span id="end-time-display" class="time-display">9:00 PM</span>
-                        </label>
-                        <input type="range" id="end-hour" min="0" max="23" value="21" class="slider">
-                    </div>
-                </div>
-
-                <div class="settings-section">
-                    <h2>Frequency</h2>
-                    <div class="setting-item">
-                        <label for="frequency" class="setting-label">
-                            <span>Bells Per Hour</span>
-                            <span id="frequency-display" class="time-display">2-3</span>
-                        </label>
-                        <select id="frequency" class="select">
-                            <option value="1-2">1-2 times</option>
-                            <option value="2-3" selected>2-3 times</option>
-                            <option value="3-4">3-4 times</option>
-                            <option value="4-6">4-6 times</option>
-                        </select>
-                    </div>
-                </div>
-
-                <div class="settings-section">
-                    <button id="reset-stats" class="btn-secondary full-width">Reset Daily Stats</button>
-                </div>
-            </main>
+        <div id="bellOverlay" class="bell-overlay hidden">
+            <div class="bell-animation">
+                <div class="bell-icon">🔔</div>
+                <p class="bell-message">Breathe and be present</p>
+            </div>
         </div>
     </div>
 

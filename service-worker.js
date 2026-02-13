@@ -1,13 +1,13 @@
 const CACHE_NAME = 'mindful-bell-v1';
 const urlsToCache = [
-  './',
-  './index.html',
-  './style.css',
-  './script.js',
-  './manifest.json'
+  '/',
+  '/index.html',
+  '/style.css',
+  '/script.js',
+  '/manifest.json'
 ];
 
-// Install service worker and cache resources
+// Install event - cache resources
 self.addEventListener('install', (event) => {
   event.waitUntil(
     caches.open(CACHE_NAME)
@@ -18,7 +18,7 @@ self.addEventListener('install', (event) => {
   );
 });
 
-// Fetch from cache, fallback to network
+// Fetch event - serve from cache, fall back to network
 self.addEventListener('fetch', (event) => {
   event.respondWith(
     caches.match(event.request)
@@ -33,7 +33,7 @@ self.addEventListener('fetch', (event) => {
   );
 });
 
-// Update service worker
+// Activate event - clean up old caches
 self.addEventListener('activate', (event) => {
   const cacheWhitelist = [CACHE_NAME];
   event.waitUntil(
